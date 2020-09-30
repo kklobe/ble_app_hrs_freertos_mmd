@@ -77,10 +77,10 @@ volatile int MAIN_MonCnt;   // Incremented in JLINK_MONITOR_OnPoll() while CPU i
 *  Notes 
 *    (1) Must not keep the CPU busy for more than 100 ms
 */ 
-static volatile UBaseType_t uxInterruptWoken;
+static volatile UBaseType_t uxSavedInterruptStatus;
 
 void JLINK_MONITOR_OnExit(void) {
-  taskEXIT_CRITICAL_FROM_ISR(uxInterruptWoken);
+  taskEXIT_CRITICAL_FROM_ISR(uxSavedInterruptStatus);
 }
 
 /********************************************************************* 
@@ -95,7 +95,7 @@ void JLINK_MONITOR_OnExit(void) {
 *    (1) Must not keep the CPU busy for more than 100 ms
 */ 
 void JLINK_MONITOR_OnEnter(void) {
-  uxInterruptWoken = taskENTER_CRITICAL_FROM_ISR();
+  uxSavedInterruptStatus = taskENTER_CRITICAL_FROM_ISR();
 }
 
 /********************************************************************* 
